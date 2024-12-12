@@ -36,6 +36,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   supabase_flutter: ^2.5.11
+  sticky_headers: ^0.3.0+2
+  dropdown_search: ^5.0.6
+  intl: ^0.20.0
+  excel: ^4.0.6
+  syncfusion_flutter_datagrid: ^27.2.4
 
 dev_dependencies:
   flutter_test:
