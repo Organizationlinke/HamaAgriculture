@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inspection_app/tools/global.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -38,24 +39,34 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(labelText: 'اسم المستخدم'),
-                ),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(labelText: 'كلمة المرور'),
-                  obscureText: true,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _login,
-                  child: Text('تسجيل الدخول'),
-                ),
-              ],
+            child: SizedBox(
+              width: 400,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('شاشة تسجيل الدخول',style: TextStyle(fontSize: 25),),
+                  SizedBox(height: 50),
+                      TextField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(labelText: 'اسم المستخدم',icon: Icon(Icons.person)),
+              
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(labelText: 'كلمة المرور',icon: Icon(Icons.password)),
+                    obscureText: true,
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:ColorTablebackHedar,
+                      foregroundColor: ColorTableForeHedar
+                    ),
+                    onPressed: _login,
+                    child: Text('تسجيل الدخول'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
