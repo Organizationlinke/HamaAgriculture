@@ -104,6 +104,7 @@ class _AddFarmsState extends State<AddFarms> {
                           Row(
                             children: [
                               Text(
+                                // اسم الصفحة
                                 widget.ScreenName,
                                 style: TextStyle(
                                   fontSize: 20,
@@ -113,6 +114,7 @@ class _AddFarmsState extends State<AddFarms> {
                                 width: 10,
                               ),
                               IconButton(
+                                // اضافة عنصر
                                   onPressed: () {
                                     setState(() {
                                       _addController.text = '';
@@ -130,9 +132,17 @@ class _AddFarmsState extends State<AddFarms> {
                           if (add)
                             Column(
                               children: [
-                                TextField(
-                                  controller: _addController,
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        controller: _addController,
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                                //الحفظ والحذف
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
