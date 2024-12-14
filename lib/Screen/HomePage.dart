@@ -4,6 +4,7 @@ import 'package:inspection_app/Screen/InputData/ExportDataList.dart';
 import 'package:inspection_app/Screen/InputData/FarmsInputData.dart';
 import 'package:inspection_app/Screen/reports/ReportManager.dart';
 import 'package:inspection_app/tools/global.dart';
+import 'package:inspection_app/users/PoliciesApp.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MainScreen extends StatefulWidget {
@@ -55,6 +56,8 @@ class _MainScreenState extends State<MainScreen> {
                                 onTap: () {
                                   setState(() {
                                     _currentScreen = AddFarms(
+                                       key: ValueKey(DateTime
+                                          .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenID: 1,
                                       ScreenName: 'اسم المزرعة',
                                       ScreenType: 0,
@@ -68,6 +71,8 @@ class _MainScreenState extends State<MainScreen> {
                                 onTap: () {
                                   setState(() {
                                     _currentScreen = AddFarms(
+                                       key: ValueKey(DateTime
+                                          .now()), // مفتاح جديد لإعادة التهيئة
                                         ScreenID: 8,
                                         ScreenName: 'الصنف الرئيسي',
                                         ScreenType: 0);
@@ -80,6 +85,9 @@ class _MainScreenState extends State<MainScreen> {
                                 onTap: () {
                                   setState(() {
                                     _currentScreen = AddFarms(
+
+                                       key: ValueKey(DateTime
+                                          .now()), // مفتاح جديد لإعادة التهيئة
                                         ScreenID: 5,
                                         ScreenName: 'اسم عيوب الثمار',
                                         ScreenType: 0);
@@ -92,6 +100,8 @@ class _MainScreenState extends State<MainScreen> {
                                 onTap: () {
                                   setState(() {
                                     _currentScreen = AddFarms(
+                                       key: ValueKey(DateTime
+                                          .now()), // مفتاح جديد لإعادة التهيئة
                                         ScreenID: 8,
                                         ScreenName: 'الصنف الرئيسي',
                                         ScreenType: 6);
@@ -104,6 +114,8 @@ class _MainScreenState extends State<MainScreen> {
                                 onTap: () {
                                   setState(() {
                                     _currentScreen = AddFarms(
+                                       key: ValueKey(DateTime
+                                          .now()), // مفتاح جديد لإعادة التهيئة
                                         ScreenID: 7,
                                         ScreenName: 'اسم الموسم',
                                         ScreenType: 0);
@@ -136,6 +148,8 @@ class _MainScreenState extends State<MainScreen> {
                                       'note'
                                     ];
                                     _currentScreen = FarmsInputData(
+                                       key: ValueKey(DateTime
+                                          .now()), // مفتاح جديد لإعادة التهيئة
                                       columns: columns,
                                       ScreenName: 'جدول معاينات المزارع',
                                       Screenid: 1,
@@ -162,6 +176,8 @@ class _MainScreenState extends State<MainScreen> {
                                       'note'
                                     ];
                                     _currentScreen = FarmsInputData(
+                                       key: ValueKey(DateTime
+                                          .now()), // مفتاح جديد لإعادة التهيئة
                                       columns: columns,
                                       ScreenName: 'جدول تسجيل الحصاد الفعلي',
                                       Screenid: 2,
@@ -174,7 +190,9 @@ class _MainScreenState extends State<MainScreen> {
                                 title: Text('اوامر البيع الاسبوعية'),
                                 onTap: () {
                                   setState(() {
-                                    _currentScreen = ExportDataList();
+                                    _currentScreen = ExportDataList(
+                                      
+                                    );
                                   });
                                 },
                               ),
@@ -494,6 +512,24 @@ class _MainScreenState extends State<MainScreen> {
                               ),
                             ],
                           ),
+                       
+                          ExpansionTile(
+                            initiallyExpanded: expand,
+                            leading: Icon(Icons.input),
+                            title: Text('ادارة النظام'),
+                            children: [
+                               ListTile(
+                                leading: Icon(Icons.data_usage),
+                                title: Text('تعريف الادوار'),
+                                onTap: () {
+                                  setState(() {
+                                    _currentScreen = PoliciesApp(
+                                       
+                                    );
+                                  });
+                                },
+                              ),
+                            ])
                         ],
                       ),
                     ),

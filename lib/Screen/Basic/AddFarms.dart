@@ -23,21 +23,26 @@ class _AddFarmsState extends State<AddFarms> {
 
   int farm_id = 0;
   final TextEditingController _addController = TextEditingController();
+  final TextEditingController _addLevel = TextEditingController();
   bool add = false;
   bool edit = false;
   bool delete = false;
   int farm_level=0;
   Future<void> AddData() async {
+   if (_addLevel.text=='') {
+      print('_addLevel.text:${_addLevel.text}');
+   }
     if (edit) {
       await supabase.from('MenuData').update({
         'Name': _addController.text,
+        'FarmLevel':_addLevel.text!='' ?_addLevel.text: null
       }).eq('id', farm_id);
     } else if (delete) {
       await supabase.from('MenuData').delete().eq('id', farm_id);
     } else {
       await supabase
           .from('MenuData')
-          .insert({'Name': _addController.text, 'Type': widget.ScreenID});
+          .insert({'Name': _addController.text, 'FarmLevel':_addLevel.text!='' ?_addLevel.text: null, 'Type': widget.ScreenID});
     }
   }
 
@@ -92,7 +97,7 @@ class _AddFarmsState extends State<AddFarms> {
                 children: [
                   
                   SizedBox(
-                    width: 200,
+                    width: 300,
                     height: double.infinity,
                     // height: MediaQuery.of(context).size.height * .7,
                     child: SingleChildScrollView(
@@ -138,8 +143,23 @@ class _AddFarmsState extends State<AddFarms> {
                                     Expanded(
                                       child: TextField(
                                         controller: _addController,
+                                         decoration: InputDecoration(
+                                        labelText: 'Name',
+                                        border: OutlineInputBorder(),
+                                                                           ),
                                       ),
                                     ),
+                                    if(widget.ScreenID==1)
+                                     SizedBox(
+                                    width: 85,
+                                       child: TextField(
+                                          controller: _addLevel,
+                                           decoration: InputDecoration(
+                                        labelText: 'Levels',
+                                        border: OutlineInputBorder(),
+                                                                           ),
+                                        ),
+                                     ),
                                   ],
                                 ),
                                 //الحفظ والحذف
@@ -152,6 +172,7 @@ class _AddFarmsState extends State<AddFarms> {
                                           await FarmsList();
                                           setState(() {
                                             _addController.text = '';
+                                             _addLevel.text = '';
                                             add = false;
                                           });
                                         },
@@ -210,6 +231,7 @@ class _AddFarmsState extends State<AddFarms> {
                                                   delete = false;
                                                   _addController.text =
                                                       list['Name'] ?? '';
+                                                      _addLevel.text=list['FarmLevel'].toString() ?? '';
                                                 });
                                               },
                                               icon: Icon(

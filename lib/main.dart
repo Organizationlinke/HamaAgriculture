@@ -3,7 +3,7 @@ import 'package:inspection_app/Screen/HomePage.dart';
 import 'package:inspection_app/tools/FarmFillter.dart';
 import 'package:inspection_app/users/AddUser.dart';
 import 'package:inspection_app/users/Login.dart';
-import 'package:inspection_app/users/Permissions.dart';
+import 'package:inspection_app/users/PoliciesApp.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main()async {
@@ -37,7 +37,7 @@ class InspectionApp extends StatelessWidget {
         routes: {
           '/login': (context) => LoginScreen(),
           '/adduser': (context) => UserManagementScreen(),
-          '/permissions': (context) => PermissionsScreen(),
+          '/policiesapp': (context) => PoliciesApp(),
           '/home': (context) =>MainScreen(),
           '/farmscreen': (context) =>FarmScreen(is_finished: true,seasonid:0),
        
