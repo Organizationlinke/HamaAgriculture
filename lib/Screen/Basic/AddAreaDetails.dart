@@ -284,9 +284,9 @@ class _AddAreaDetailsState extends State<AddAreaDetails> {
                           },
                           child: Row(
                             children: [
-                              Text('تعديل'),
+                              Text('حفظ'),
                               SizedBox(width: 10),
-                              Icon(Icons.edit)
+                              Icon(Icons.save)
                             ],
                           ),
                         ),

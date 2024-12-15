@@ -36,6 +36,7 @@ class _InputDataPageState extends State<InputDataPage> {
   List<Map<String, dynamic>> Season = [];
   String? selectedSeasonId;
   double totalPercentages = 0.0;
+  bool _isButtonDisabled = false;
   // int InputData_ID = 0;
   @override
   void initState() {
@@ -48,8 +49,6 @@ class _InputDataPageState extends State<InputDataPage> {
       selectedSubAreaId = widget.SubAreaId;
       fetchDataTable();
     }
-
-   
   }
 
   @override
@@ -104,7 +103,7 @@ class _InputDataPageState extends State<InputDataPage> {
         if (index != -1) {
           defectPercentages[index] = defect['percentage'];
           defectControllers[index].text = defect['percentage'].toString();
-        } 
+        }
       }
 
       // جلب البيانات من جدول SizePercentage
@@ -118,7 +117,7 @@ class _InputDataPageState extends State<InputDataPage> {
         final index = sizes.indexWhere((s) => s['id'] == size['size_id']);
         if (index != -1) {
           sizePercentages[index] = size['percentage'];
-          sizeControllers[index].text =size['percentage'].toString();
+          sizeControllers[index].text = size['percentage'].toString();
         }
       }
 
@@ -142,7 +141,7 @@ class _InputDataPageState extends State<InputDataPage> {
           'decision': Decision,
           'season': selectedSeasonId,
           'Farza': totalPercentages,
-          'type':1
+          'type': 1
         }).eq('id', widget.ScreenID);
 
         // تحديث الجداول الفرعية
@@ -152,7 +151,6 @@ class _InputDataPageState extends State<InputDataPage> {
             'defect_id': defects[i]['id'],
             'percentage': defectPercentages[i],
           });
-       
         }
         await supabase
             .from('SizePercentage')
@@ -164,7 +162,6 @@ class _InputDataPageState extends State<InputDataPage> {
             'size_id': sizes[i]['id'],
             'percentage': sizePercentages[i],
           });
-     
         }
       } else {
         // إدخال بيانات جديدة
@@ -177,7 +174,7 @@ class _InputDataPageState extends State<InputDataPage> {
               'decision': Decision,
               'season': selectedSeasonId,
               'Farza': totalPercentages,
-               'type':1
+              'type': 1
             })
             .select()
             .single();
@@ -226,8 +223,11 @@ class _InputDataPageState extends State<InputDataPage> {
   }
 
   Future<void> loadDefects() async {
-    final defectsResponse =
-        await supabase.from('MenuData').select('id, Name').eq('Type', 5).order('id', ascending: true);
+    final defectsResponse = await supabase
+        .from('MenuData')
+        .select('id, Name')
+        .eq('Type', 5)
+        .order('id', ascending: true);
 
     setState(() {
       defects = List<Map<String, dynamic>>.from(defectsResponse);
@@ -242,13 +242,14 @@ class _InputDataPageState extends State<InputDataPage> {
         .from('MenuData')
         .select('id, Name,KG008,KG015')
         .eq('Type', 6)
-        .eq('Parant', cropgroup).order('id', ascending: true);
+        .eq('Parant', cropgroup)
+        .order('id', ascending: true);
 
     setState(() {
       sizes = List<Map<String, dynamic>>.from(sizesResponse);
       sizePercentages = List<double>.filled(sizes.length, 0.0);
-       sizeControllers =
-        List.generate(sizes.length, (index) => TextEditingController());
+      sizeControllers =
+          List.generate(sizes.length, (index) => TextEditingController());
     });
   }
 
@@ -317,7 +318,7 @@ class _InputDataPageState extends State<InputDataPage> {
                       final result = await showDialog(
                         context: context,
                         builder: (context) => Dialog(
-                          child: FarmScreen(is_finished: true,seasonid:0),
+                          child: FarmScreen(is_finished: true, seasonid: 0),
                         ),
                       );
                       selectedSubAreaId = result;
@@ -603,7 +604,8 @@ class _InputDataPageState extends State<InputDataPage> {
                                           DataCell(Text(size['KG015'])),
                                           DataCell(
                                             TextField(
-                                              controller: sizeControllers[index],
+                                              controller:
+                                                  sizeControllers[index],
                                               onChanged: (value) {
                                                 setState(() {
                                                   sizePercentages[index] =
@@ -660,10 +662,26 @@ class _InputDataPageState extends State<InputDataPage> {
               ),
 
               ElevatedButton(
-                onPressed: () async {
-                  await saveData();
-                  Navigator.pop(context, true);
-                },
+                onPressed: _isButtonDisabled
+                    ? null // تعطيل الزر
+                    : () async {
+                        setState(() {
+                          _isButtonDisabled = true; // تعطيل الزر بعد الضغط
+                        });
+                        try {
+                          await saveData(); // تنفيذ العملية
+                          Navigator.pop(
+                              context, true); // التنقل بعد انتهاء العملية
+                        } finally {
+                          setState(() {
+                            _isButtonDisabled = false; // إعادة تمكين الزر
+                          });
+                        }
+                      },
+                // onPressed: () async {
+                //   await saveData();
+                //   Navigator.pop(context, true);
+                // },
                 child: Text('حفظ البيانات'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: ColorTablebackHedar,

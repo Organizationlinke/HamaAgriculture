@@ -20,6 +20,9 @@ class _ExportDataListState extends State<ExportDataList> {
   String? selectedSeasonId;
   String? selectedCropId;
   int? selectedRowIndex;
+  String bestlocation = "اختيار أفضل موقع للقطف";
+  String _edit = 'تعديل';
+  String _delete = 'حذف';
 
   // Variables for datatable
   List<Map<String, dynamic>> dataTableRows = [];
@@ -272,15 +275,101 @@ class _ExportDataListState extends State<ExportDataList> {
                                       Text(row[col]?.toString() ?? ''),
                                     ))
                                 .toList(),
-                            DataCell(
-                             
-                                    PopupMenuButton<String>(
-                                    icon:
-                                        Icon(Icons.more_vert), // أيقونة القائمة
-                                    onSelected: (value) async {
-                                      if (value == "عرض") {
-                                     
-                                           final result = await showDialog(
+                            DataCell(PopupMenuButton<String>(
+                              icon: Icon(Icons.more_vert), // أيقونة القائمة
+                              onSelected: (value) async {
+                                if (value == _delete) {
+                                  final originalContext =
+                                      context; // حفظ السياق الأصلي
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('تأكيد العملية'),
+                                        content: Text(
+                                            'هل أنت متأكد من أنك تريد تنفيذ هذه العملية؟'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // إغلاق مربع الحوار بدون تنفيذ
+                                            },
+                                            child: Text('إلغاء'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              Navigator.of(context)
+                                                  .pop(); // إغلاق مربع الحوار
+                                              await supabase
+                                                  .from('ExportPlan')
+                                                  .delete()
+                                                  .eq('id', row['id']);
+
+                                              await fetchDataTable();
+                                              setState(() {});
+
+                                              // استخدام السياق الأصلي هنا
+                                              ScaffoldMessenger.of(
+                                                      originalContext)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'تم حذف البيانات بنجاح'),
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                              );
+                                            },
+                                            child: Text('تأكيد'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+
+                                // if (value == _delete) {
+                                //   showDialog(
+                                //     context: context,
+                                //     builder: (BuildContext context) {
+                                //       return AlertDialog(
+                                //         title: Text('تأكيد العملية'),
+                                //         content: Text(
+                                //             'هل أنت متأكد من أنك تريد تنفيذ هذه العملية؟'),
+                                //         actions: [
+                                //           TextButton(
+                                //             onPressed: () {
+                                //               Navigator.of(context)
+                                //                   .pop(); // إغلاق مربع الحوار بدون تنفيذ
+                                //             },
+                                //             child: Text('إلغاء'),
+                                //           ),
+                                //           TextButton(
+                                //             onPressed: () async {
+                                //               Navigator.of(context)
+                                //                   .pop(); // إغلاق مربع الحوار
+                                //               await supabase
+                                //                   .from('ExportPlan')
+                                //                   .delete()
+                                //                   .eq('id', row['id']);
+
+                                //               await fetchDataTable();
+                                //               setState(()  {});
+                                //               ScaffoldMessenger.of(context)
+                                //                   .showSnackBar(SnackBar(
+                                //                 content: Text(
+                                //                     'تم حذف البيانات بنجاح'),
+                                //                 backgroundColor: Colors.green,
+                                //               ));
+                                //             },
+                                //             child: Text('تأكيد'),
+                                //           ),
+                                //         ],
+                                //       );
+                                //     },
+                                //   );
+                                // }
+                                if (value == _edit) {
+                                  final result = await showDialog(
                                     context: context,
                                     builder: (context) => Dialog(
                                       child: SizedBox(
@@ -296,70 +385,102 @@ class _ExportDataListState extends State<ExportDataList> {
                                     await fetchDataTable();
                                     setState(() {});
                                   }
-                                      } else if (value ==
-                                          "اختيار أفضل موقع للقطف") {
-                                             String ReportName ='اختيار افضل مكان للقطف' ;
-                                    List<String> GroupColumn = [
-                                      'farm',
-                                      'area',
-                                      'reservoir',
-                                      'subarea',
-                                      'subareaids',
-                                       'crop',
-                                        'export_qty',
-                                      'farm_balance',
-                                      'match_percentage'
-                                     
-                                    ];
-                                    List<String> Num_Columns = [
-                                      // 'sum(export_qty) as export_qty',
-                                      // 'sum(farm_balance) as farm_balance',
-                                      // 'sum(match_percentage) as match_percentage'
-                                    ];
-                                    List<String> formatColumns = [
-                                      // 'export_qty',
-                                      // 'farm_balance',
-                                      // 'match_percentage'
-                                    ];
-                                      await showDialog(
+                                } else if (value == bestlocation) {
+                                  String ReportName = bestlocation;
+                                  List<String> GroupColumn = [
+                                    'farm',
+                                    'area',
+                                    'reservoir',
+                                    'subarea',
+                                    'subareaids',
+                                    'crop',
+                                    'export_qty',
+                                    'farm_balance',
+                                    'match_percentage'
+                                  ];
+                                  List<String> Num_Columns = [
+                                    // 'sum(export_qty) as export_qty',
+                                    // 'sum(farm_balance) as farm_balance',
+                                    // 'sum(match_percentage) as match_percentage'
+                                  ];
+                                  List<String> formatColumns = [
+                                    // 'export_qty',
+                                    // 'farm_balance',
+                                    // 'match_percentage'
+                                  ];
+                                  await showDialog(
                                     context: context,
                                     builder: (context) => Dialog(
                                       child: SizedBox(
                                         width: 1000,
                                         height: 900,
-                                        child: ReportDetailsBySizeCopy( 
+                                        child: ReportDetailsBySizeCopy(
                                           isSales: true,
                                           ispick: false,
-                                         exportid:row['id'],
-                                            ScreenName: 'get_best_area()',
-                                      ScreenId: 7,
-                                      ReportName: ReportName,
-                                      Num_Columns: Num_Columns,
-                                      GroupColumn: GroupColumn,
-                                      formatColumns: formatColumns,
-                                      comitt: false,
-                                      farm: false,
-                                      season: false,
+                                          exportid: row['id'],
+                                          ScreenName: 'get_best_area()',
+                                          ScreenId: 7,
+                                          ReportName: ReportName,
+                                          Num_Columns: Num_Columns,
+                                          GroupColumn: GroupColumn,
+                                          formatColumns: formatColumns,
+                                          comitt: false,
+                                          farm: false,
+                                          season: false,
                                         ),
                                       ),
                                     ),
                                   );
-                                      }
-                                    },
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                        value: "عرض",
-                                        child: Text("عرض"),
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  value: _edit,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
                                       ),
-                                      PopupMenuItem(
-                                        value: "اختيار أفضل موقع للقطف",
-                                        child: Text("اختيار أفضل موقع للقطف"),
+                                      SizedBox(
+                                        width: 10,
                                       ),
+                                      Text(_edit),
                                     ],
-                                  )
-                                 
-                              
-                            ),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: _delete,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(_delete),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: bestlocation,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_pin,
+                                        color: Colors.green,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(bestlocation),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )),
                           ]),
                         ),
                         DataRow(

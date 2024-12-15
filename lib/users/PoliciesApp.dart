@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 
 
@@ -20,6 +21,7 @@ class _PoliciesScreenState extends State<PoliciesScreen> {
   List<Map<String, dynamic>> policies = []; // قائمة أسماء الصلاحيات
   List<Map<String, dynamic>> policiesSub = []; // بيانات جدول Policies_sub
   int? selectedPolicyId;
+  final supabase = Supabase.instance.client;
 
   @override
   void initState() {
@@ -28,6 +30,8 @@ class _PoliciesScreenState extends State<PoliciesScreen> {
   }
 
   Future<void> fetchPolicies() async {
+    final response = await supabase.from('Policies').select();
+
     // جلب بيانات الصلاحيات من قاعدة البيانات
     // هنا استبدل بسطر الاتصال بـ Supabase أو أي API
     setState(() {

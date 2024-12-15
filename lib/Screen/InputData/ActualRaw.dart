@@ -31,6 +31,7 @@ class _ActualRawState extends State<ActualRaw> {
   List<Map<String, dynamic>> Season = [];
   String? selectedSeasonId;
   double totalPercentages = 0.0;
+  bool _isButtonDisabled = false;
   // int InputData_ID = 0;
   @override
   void initState() {
@@ -377,10 +378,26 @@ class _ActualRawState extends State<ActualRaw> {
                 height: 40,
               ),
               ElevatedButton(
-                onPressed: () async {
-                  await saveData();
-                  Navigator.pop(context, true);
-                },
+                onPressed: _isButtonDisabled
+                    ? null // تعطيل الزر
+                    : () async {
+                        setState(() {
+                          _isButtonDisabled = true; // تعطيل الزر بعد الضغط
+                        });
+                        try {
+                          await saveData(); // تنفيذ العملية
+                          Navigator.pop(
+                              context, true); // التنقل بعد انتهاء العملية
+                        } finally {
+                          setState(() {
+                            _isButtonDisabled = false; // إعادة تمكين الزر
+                          });
+                        }
+                      },
+                // onPressed: () async {
+                //   await saveData();
+                //   Navigator.pop(context, true);
+                // },
                 child: Text('حفظ البيانات'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: ColorTablebackHedar,

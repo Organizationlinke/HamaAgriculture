@@ -35,6 +35,8 @@ class _FarmsInputDataState extends State<FarmsInputData> {
   int? selectedRowIndex;
   String committeeDecision = '';
   bool? Decision;
+  String _edit = 'تعديل';
+  String _delete = 'حذف';
 
   // Variables for datatable
   List<Map<String, dynamic>> dataTableRows = [];
@@ -466,12 +468,10 @@ class _FarmsInputDataState extends State<FarmsInputData> {
                                       Text(row[col]?.toString() ?? ''),
                                     ))
                                 .toList(),
-                            DataCell(
-                              IconButton(
-                                icon: Icon(Icons.menu),
-                                onPressed: () async {
-                                
-
+                            DataCell(PopupMenuButton<String>(
+                              icon: Icon(Icons.more_vert), // أيقونة القائمة
+                              onSelected: (value) async {
+                                if (value == _edit) {
                                   if (widget.Screenid == 1) {
                                     Navigator.push(
                                       context,
@@ -508,9 +508,141 @@ class _FarmsInputDataState extends State<FarmsInputData> {
                                       setState(() {});
                                     }
                                   }
-                                },
-                              ),
-                            ),
+                                }
+                                if (value == _delete) {
+                                  final originalContext =
+                                      context; // حفظ السياق الأصلي
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('تأكيد العملية'),
+                                        content: Text(
+                                            'هل أنت متأكد من أنك تريد تنفيذ هذه العملية؟'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // إغلاق مربع الحوار بدون تنفيذ
+                                            },
+                                            child: Text('إلغاء'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              Navigator.of(context)
+                                                  .pop(); // إغلاق مربع الحوار
+                                              await supabase
+                                                  .from('InputData')
+                                                  .delete()
+                                                  .eq('id', row['id']);
+
+                                              await fetchDataTable();
+                                              setState(() {});
+
+                                              // استخدام السياق الأصلي هنا
+                                              ScaffoldMessenger.of(
+                                                      originalContext)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'تم حذف البيانات بنجاح'),
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                              );
+                                            },
+                                            child: Text('تأكيد'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+
+                                // if (value == _delete) {
+                                //   showDialog(
+                                //     context: context,
+                                //     builder: (BuildContext context) {
+                                //       return AlertDialog(
+                                //         title: Text('تأكيد العملية'),
+                                //         content: Text(
+                                //             'هل أنت متأكد من أنك تريد تنفيذ هذه العملية؟'),
+                                //         actions: [
+                                //           TextButton(
+                                //             onPressed: () {
+                                //               Navigator.of(context)
+                                //                   .pop(); // إغلاق مربع الحوار بدون تنفيذ
+                                //             },
+                                //             child: Text('إلغاء'),
+                                //           ),
+                                //           TextButton(
+                                //             onPressed: () async {
+                                //               Navigator.of(context)
+                                //                   .pop(); // إغلاق مربع الحوار
+                                //                     await supabase
+                                //                     .from('InputData')
+                                //                     .delete()
+                                //                     .eq('id', row['id']);
+
+                                //               await    fetchDataTable();
+                                //               setState(() async {
+
+                                //               });
+                                //                ScaffoldMessenger.of(context)
+                                //                     .showSnackBar(SnackBar(
+                                //                   content: Text(
+                                //                       'تم حذف البيانات بنجاح'),
+                                //                   backgroundColor: Colors.green,
+                                //                 ));
+                                //             },
+                                //             child: Text('تأكيد'),
+                                //           ),
+                                //         ],
+                                //       );
+                                //     },
+                                //   );
+                                // }
+                              },
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  value: _edit,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(_edit),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: _delete,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(_delete),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+
+                                // IconButton(
+                                //   icon: Icon(Icons.menu),
+                                //   onPressed: () async {
+
+                                //   },
+                                // ),
+                                ),
                           ]),
                         ),
                         DataRow(

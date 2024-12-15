@@ -27,7 +27,7 @@ class _ExportdataPageState extends State<ExportdataPage> {
   List<Map<String, dynamic>> Size = [];
   List<double> sizeQTY = [];
   late List<TextEditingController> sizeControllers;
-
+  bool _isButtonDisabled = false;
   String? selectedSeasonId;
   String? selectedCropId;
   String? selectedSizeId;
@@ -63,8 +63,6 @@ class _ExportdataPageState extends State<ExportdataPage> {
           .single(); // لجلب صف واحد فقط
 
       if (response != null) {
-       
-
         // تعيين القيم الافتراضية للقوائم
         selectedSizeParant = response['sizeparant']?.toString() ?? '';
         await fetchSizes(); // تأكد من استدعاء القيم الصحيحة هنا
@@ -125,7 +123,8 @@ class _ExportdataPageState extends State<ExportdataPage> {
         .from('MenuData')
         .select('id, Name,KG008,KG015')
         .eq('Type', 6)
-        .eq('Parant', selectedSizeParant!).order('id', ascending: true);
+        .eq('Parant', selectedSizeParant!)
+        .order('id', ascending: true);
     setState(() {
       Size = List<Map<String, dynamic>>.from(response);
       sizeQTY = List<double>.filled(Size.length, 0.0);
@@ -140,8 +139,7 @@ class _ExportdataPageState extends State<ExportdataPage> {
     if (dateController.text.isEmpty ||
         weekController.text.isEmpty ||
         selectedCropId == null ||
-        selectedSeasonId == null 
-       ) {
+        selectedSeasonId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('الرجاء تعبئة جميع الحقول')),
       );
@@ -184,7 +182,8 @@ class _ExportdataPageState extends State<ExportdataPage> {
         );
       } else {
         // إضافة بيانات جديدة
-        final response = await supabase.from('ExportPlan').insert(data).select().single();
+        final response =
+            await supabase.from('ExportPlan').insert(data).select().single();
 
         final newID = response['id'];
         print('newID:$newID');
@@ -351,8 +350,8 @@ class _ExportdataPageState extends State<ExportdataPage> {
                             fontWeight: FontWeight.bold)),
                     Expanded(
                       child: SingleChildScrollView(
-                        child:  SizedBox(
-                    width: double.infinity,
+                        child: SizedBox(
+                          width: double.infinity,
                           child: DataTableTheme(
                             data: DataTableThemeData(
                                 headingRowColor:
@@ -368,10 +367,14 @@ class _ExportdataPageState extends State<ExportdataPage> {
                                 headingRowHeight: 40),
                             child: DataTable(
                               columns: [
-                                DataColumn(label: Expanded(child: Text('كود الحجم'))),
-                                DataColumn(label: Expanded(child: Text('KG008'))),
-                                DataColumn(label: Expanded(child: Text('KG015'))),
-                                DataColumn(label: Expanded(child: Text('الكمية'))),
+                                DataColumn(
+                                    label: Expanded(child: Text('كود الحجم'))),
+                                DataColumn(
+                                    label: Expanded(child: Text('KG008'))),
+                                DataColumn(
+                                    label: Expanded(child: Text('KG015'))),
+                                DataColumn(
+                                    label: Expanded(child: Text('الكمية'))),
                               ],
                               rows: [
                                 ...Size.asMap().entries.map((entry) {
@@ -402,8 +405,8 @@ class _ExportdataPageState extends State<ExportdataPage> {
                                   cells: [
                                     DataCell(Text(
                                       'إجمالي الكميات',
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     )),
                                     DataCell(Text('')),
                                     DataCell(Text('')),
@@ -411,8 +414,8 @@ class _ExportdataPageState extends State<ExportdataPage> {
                                     DataCell(Text(
                                       calculateTotal(sizeQTY, 1)
                                           .toStringAsFixed(2),
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     )),
                                   ],
                                   color: MaterialStateProperty.all(
@@ -428,23 +431,36 @@ class _ExportdataPageState extends State<ExportdataPage> {
                 ),
               ),
 
-             
-             
               SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () async {
-                  await saveData();
-                  Navigator.pop(context, true);
-                },
+                onPressed: _isButtonDisabled
+                    ? null // تعطيل الزر
+                    : () async {
+                        setState(() {
+                          _isButtonDisabled = true; // تعطيل الزر بعد الضغط
+                        });
+                        try {
+                          await saveData(); // تنفيذ العملية
+                          Navigator.pop(
+                              context, true); // التنقل بعد انتهاء العملية
+                        } finally {
+                          setState(() {
+                            _isButtonDisabled = false; // إعادة تمكين الزر
+                          });
+                        }
+                      },
+                // onPressed: () async {
+                //   await saveData();
+                //   Navigator.pop(context, true);
+                // },
                 child: Text('Save'),
-                 style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   backgroundColor: ColorTablebackHedar,
                   foregroundColor: ColorTableForeHedar,
                   // لون الزر
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                   textStyle: TextStyle(fontSize: 18),
                 ),
-              
               ),
             ],
           ),
