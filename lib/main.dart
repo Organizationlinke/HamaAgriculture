@@ -39,7 +39,7 @@ class _InspectionAppState extends State<InspectionApp> {
   Future<void> checkForUpdates() async {
   try {
     // استبدل هذا الرابط بعنوان `version.txt` الخاص بتطبيقك
-    final response = await http.get(Uri.parse('https://organizationlinke.github.io/HamaAgriculture/version.txt'));
+    final response = await http.get(Uri.parse('https://github.com/Organizationlinke/HamaAgriculture/blob/main/version.txt'));
 
     if (response.statusCode == 200) {
       final serverVersion = response.body.trim(); // النسخة الجديدة
