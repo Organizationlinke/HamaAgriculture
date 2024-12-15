@@ -96093,7 +96093,7 @@ Ch(){var s=0,r=A.w(t.H),q=1,p,o,n,m,l,k,j
 var $async$Ch=A.x(function(a,b){if(a===1){p=b
 s=q}while(true)switch(s){case 0:q=3
 s=6
-return A.n(A.aZU(A.e5("https://organizationlinke.github.io/HamaAgriculture/version.txt",0,null),null),$async$Ch)
+return A.n(A.aZU(A.e5("https://github.com/Organizationlinke/HamaAgriculture/blob/main/version.txt",0,null),null),$async$Ch)
 case 6:o=b
 if(o.b===200){l=o
 n=B.d.jy(A.kL(J.a9(A.kJ(l.e).c.a,"charset")).cg(0,l.w))
