@@ -5,8 +5,7 @@ import 'package:inspection_app/users/AddUser.dart';
 import 'package:inspection_app/users/Login.dart';
 import 'package:inspection_app/users/PoliciesApp.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:html';
-import 'package:http/http.dart' as http;
+
 
 void main()async {
   const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
@@ -32,32 +31,7 @@ class InspectionApp extends StatefulWidget {
 }
 
 class _InspectionAppState extends State<InspectionApp> {
-   void initState() {
-    super.initState();
-    checkForUpdates(); // التحقق عند بدء التطبيق
-  }
-  Future<void> checkForUpdates() async {
-  try {
-    // استبدل هذا الرابط بعنوان `version.txt` الخاص بتطبيقك
-    final response = await http.get(Uri.parse('https://github.com/Organizationlinke/HamaAgriculture/blob/main/version.txt'));
-
-    if (response.statusCode == 200) {
-      final serverVersion = response.body.trim(); // النسخة الجديدة
-      const currentVersion = '1.0.0'; // النسخة الحالية للتطبيق
-
-      if (serverVersion != currentVersion) {
-        // إذا كانت النسخة مختلفة، يتم تحديث الصفحة
-        reloadPage();
-      }
-    }
-  } catch (e) {
-    print('خطأ أثناء التحقق من التحديثات: $e');
-  }
-}
-  void reloadPage() {
-  window.location.reload();
-}
-
+ 
   @override
   Widget build(BuildContext context) {
     return Directionality(

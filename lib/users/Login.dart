@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inspection_app/tools/global.dart';
+import 'dart:html';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,6 +11,34 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  String test='';
+
+  void initState() {
+    super.initState();
+    checkForUpdates(); // التحقق عند بدء التطبيق
+  }
+  Future<void> checkForUpdates() async {
+  try {
+    // استبدل هذا الرابط بعنوان `version.txt` الخاص بتطبيقك
+    final response = await http.get(Uri.parse('https://github.com/Organizationlinke/HamaAgriculture/blob/main/version.txt'));
+
+    if (response.statusCode == 200) {
+      test='نسخة جديده';
+      final serverVersion = response.body.trim(); // النسخة الجديدة
+      const currentVersion = '1.0.0'; // النسخة الحالية للتطبيق
+
+      if (serverVersion != currentVersion) {
+        // إذا كانت النسخة مختلفة، يتم تحديث الصفحة
+        reloadPage();
+      }
+    }
+  } catch (e) {
+    print('خطأ أثناء التحقق من التحديثات: $e');
+  }
+}
+  void reloadPage() {
+  window.location.reload();
+}
 
   void _login() {
     final username = _usernameController.text.trim();
@@ -44,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text(test),
                   Text('شاشة تسجيل الدخول',style: TextStyle(fontSize: 25),),
                   SizedBox(height: 50),
                       TextField(
@@ -53,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextField(
                     controller: _passwordController,
-                    decoration: InputDecoration(labelText: 'كلمة المرور',icon: Icon(Icons.lock)),
+                    decoration: InputDecoration(labelText: 'كلمة المرور',icon: Icon(Icons.lock,color: Colors.blue,)),
                     obscureText: true,
                   ),
                   SizedBox(height: 20),
