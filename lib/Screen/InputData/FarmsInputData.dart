@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:inspection_app/Screen/InputData/ActualRaw.dart';
 import 'package:inspection_app/Screen/InputData/InputDataPage.dart';
 import 'package:inspection_app/tools/global.dart';
@@ -183,7 +184,30 @@ class _FarmsInputDataState extends State<FarmsInputData> {
 
     return groupedData.values.toList();
   }
+  Future<void> copyTableToClipboard(
+      List<Map<String, dynamic>> rows, List<String> columns) async {
+    try {
+      // بناء النص المنسق
+      StringBuffer buffer = StringBuffer();
 
+      // إضافة رؤوس الأعمدة
+      buffer.writeln(columns.join('\t')); // استخدام Tab كفاصل بين الأعمدة
+
+      // إضافة الصفوف
+      for (var row in rows) {
+        List<String> rowData =
+            columns.map((col) => row[col]?.toString() ?? '').toList();
+        buffer.writeln(rowData.join('\t'));
+      }
+
+      // نسخ النص إلى الحافظة
+      await Clipboard.setData(ClipboardData(text: buffer.toString()));
+
+      print('تم نسخ محتويات الجدول إلى الحافظة!');
+    } catch (e) {
+      print('حدث خطأ أثناء النسخ: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -432,6 +456,22 @@ class _FarmsInputDataState extends State<FarmsInputData> {
                     },
                     child: Text('تحميل البيانات'),
                   ),
+                   IconButton(
+                  icon: Icon(Icons.copy),
+                  onPressed: () async {
+                    List<Map<String, dynamic>> rows = processRows();
+                    List<String> columnss = widget.columns
+                        .where((col) => !hiddenColumns.contains(col))
+                        .toList();
+
+                    await copyTableToClipboard(rows, columnss);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text('تم نسخ محتويات الجدول إلى الحافظة!')),
+                    );
+                  },
+                ),
                 ],
               ),
             ),

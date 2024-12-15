@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:inspection_app/Screen/InputData/ExportdataPage.dart';
 import 'package:inspection_app/tools/global.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -121,6 +122,31 @@ class _ExportDataListState extends State<ExportDataList> {
     return groupedData.values.toList();
   }
 
+  Future<void> copyTableToClipboard(
+      List<Map<String, dynamic>> rows, List<String> columns) async {
+    try {
+      // بناء النص المنسق
+      StringBuffer buffer = StringBuffer();
+
+      // إضافة رؤوس الأعمدة
+      buffer.writeln(columns.join('\t')); // استخدام Tab كفاصل بين الأعمدة
+
+      // إضافة الصفوف
+      for (var row in rows) {
+        List<String> rowData =
+            columns.map((col) => row[col]?.toString() ?? '').toList();
+        buffer.writeln(rowData.join('\t'));
+      }
+
+      // نسخ النص إلى الحافظة
+      await Clipboard.setData(ClipboardData(text: buffer.toString()));
+
+      print('تم نسخ محتويات الجدول إلى الحافظة!');
+    } catch (e) {
+      print('حدث خطأ أثناء النسخ: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,6 +266,22 @@ class _ExportDataListState extends State<ExportDataList> {
                   },
                   child: Text('تحميل البيانات'),
                 ),
+                IconButton(
+                  icon: Icon(Icons.copy),
+                  onPressed: () async {
+                    List<Map<String, dynamic>> rows = processRows();
+                    List<String> columnss = columns
+                        .where((col) => !hiddenColumns.contains(col))
+                        .toList();
+
+                    await copyTableToClipboard(rows, columnss);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text('تم نسخ محتويات الجدول إلى الحافظة!')),
+                    );
+                  },
+                ),
               ],
             ),
             SizedBox(height: 20),
@@ -327,47 +369,6 @@ class _ExportDataListState extends State<ExportDataList> {
                                   );
                                 }
 
-                                // if (value == _delete) {
-                                //   showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return AlertDialog(
-                                //         title: Text('تأكيد العملية'),
-                                //         content: Text(
-                                //             'هل أنت متأكد من أنك تريد تنفيذ هذه العملية؟'),
-                                //         actions: [
-                                //           TextButton(
-                                //             onPressed: () {
-                                //               Navigator.of(context)
-                                //                   .pop(); // إغلاق مربع الحوار بدون تنفيذ
-                                //             },
-                                //             child: Text('إلغاء'),
-                                //           ),
-                                //           TextButton(
-                                //             onPressed: () async {
-                                //               Navigator.of(context)
-                                //                   .pop(); // إغلاق مربع الحوار
-                                //               await supabase
-                                //                   .from('ExportPlan')
-                                //                   .delete()
-                                //                   .eq('id', row['id']);
-
-                                //               await fetchDataTable();
-                                //               setState(()  {});
-                                //               ScaffoldMessenger.of(context)
-                                //                   .showSnackBar(SnackBar(
-                                //                 content: Text(
-                                //                     'تم حذف البيانات بنجاح'),
-                                //                 backgroundColor: Colors.green,
-                                //               ));
-                                //             },
-                                //             child: Text('تأكيد'),
-                                //           ),
-                                //         ],
-                                //       );
-                                //     },
-                                //   );
-                                // }
                                 if (value == _edit) {
                                   final result = await showDialog(
                                     context: context,
