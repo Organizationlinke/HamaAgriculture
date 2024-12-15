@@ -13,11 +13,11 @@ void main()async {
   const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
 
    await Supabase.initialize(
-    //  url: supabaseUrl, // قراءة URL
-    // anonKey: supabaseAnonKey, // قراءة المفتاح
-    url: 'https://qhfgwpnsjzqtxygbdgbb.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoZmd3cG5zanpxdHh5Z2JkZ2JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIxODE0ODQsImV4cCI6MjA0Nzc1NzQ4NH0.e-UNyfg5k6bMTdQ4ZyDlWzjB_LSyZzvR8nZj3L1tH2c',
+     url: supabaseUrl, // قراءة URL
+    anonKey: supabaseAnonKey, // قراءة المفتاح
+    // url: 'https://qhfgwpnsjzqtxygbdgbb.supabase.co',
+    // anonKey:
+    //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoZmd3cG5zanpxdHh5Z2JkZ2JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIxODE0ODQsImV4cCI6MjA0Nzc1NzQ4NH0.e-UNyfg5k6bMTdQ4ZyDlWzjB_LSyZzvR8nZj3L1tH2c',
   );
   runApp(InspectionApp());
 
