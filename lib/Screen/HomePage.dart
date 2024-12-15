@@ -20,6 +20,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    if (userid=='0') {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   @override
@@ -225,7 +228,7 @@ class _MainScreenState extends State<MainScreen> {
                                       'sum(acre) as acre',
                                       'sum(trees)as trees'
                                     ];
-                                    _currentScreen = ReportDetailsBySizeCopy(
+                                    _currentScreen = ReportManager(
                                       key: ValueKey(DateTime
                                           .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenName: 'get_farms_listsub()',
@@ -277,7 +280,7 @@ class _MainScreenState extends State<MainScreen> {
                                       'farza_qty',
                                       'class1'
                                     ];
-                                    _currentScreen = ReportDetailsBySizeCopy(
+                                    _currentScreen = ReportManager(
                                       key: ValueKey(DateTime
                                           .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenName: 'get_input_data_bysize()',
@@ -324,7 +327,7 @@ class _MainScreenState extends State<MainScreen> {
                                     ];
                                     List<String> formatColumns = ['farza_qty'];
 
-                                    _currentScreen = ReportDetailsBySizeCopy(
+                                    _currentScreen = ReportManager(
                                       key: ValueKey(DateTime
                                           .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenName: 'get_input_data_bydefect()',
@@ -364,7 +367,7 @@ class _MainScreenState extends State<MainScreen> {
                                     List<String> formatColumns = [
                                       'qty',
                                     ];
-                                    _currentScreen = ReportDetailsBySizeCopy(
+                                    _currentScreen = ReportManager(
                                       key: ValueKey(DateTime
                                           .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenName: 'get_export_plan()',
@@ -404,7 +407,7 @@ class _MainScreenState extends State<MainScreen> {
                                     List<String> formatColumns = [
                                       'qty',
                                     ];
-                                    _currentScreen = ReportDetailsBySizeCopy(
+                                    _currentScreen = ReportManager(
                                       key: ValueKey(DateTime
                                           .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenName: 'get_export_data()',
@@ -445,7 +448,7 @@ class _MainScreenState extends State<MainScreen> {
                                       'farms_qty',
                                       'variance'
                                     ];
-                                    _currentScreen = ReportDetailsBySizeCopy(
+                                    _currentScreen = ReportManager(
                                       key: ValueKey(DateTime
                                           .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenName: 'get_farms_vs_export()',
@@ -491,7 +494,7 @@ class _MainScreenState extends State<MainScreen> {
                                       'harvest_qty',
                                       'balance'
                                     ];
-                                    _currentScreen = ReportDetailsBySizeCopy(
+                                    _currentScreen = ReportManager(
                                       key: ValueKey(DateTime
                                           .now()), // مفتاح جديد لإعادة التهيئة
                                       ScreenName: 'get_farms_balance()',

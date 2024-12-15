@@ -415,7 +415,7 @@ class _ExportDataListState extends State<ExportDataList> {
                                       child: SizedBox(
                                         width: 1000,
                                         height: 900,
-                                        child: ReportDetailsBySizeCopy(
+                                        child: ReportManager(
                                           isSales: true,
                                           ispick: false,
                                           exportid: row['id'],

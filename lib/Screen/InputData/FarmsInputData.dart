@@ -598,49 +598,6 @@ class _FarmsInputDataState extends State<FarmsInputData> {
                                   );
                                 }
 
-                                // if (value == _delete) {
-                                //   showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return AlertDialog(
-                                //         title: Text('تأكيد العملية'),
-                                //         content: Text(
-                                //             'هل أنت متأكد من أنك تريد تنفيذ هذه العملية؟'),
-                                //         actions: [
-                                //           TextButton(
-                                //             onPressed: () {
-                                //               Navigator.of(context)
-                                //                   .pop(); // إغلاق مربع الحوار بدون تنفيذ
-                                //             },
-                                //             child: Text('إلغاء'),
-                                //           ),
-                                //           TextButton(
-                                //             onPressed: () async {
-                                //               Navigator.of(context)
-                                //                   .pop(); // إغلاق مربع الحوار
-                                //                     await supabase
-                                //                     .from('InputData')
-                                //                     .delete()
-                                //                     .eq('id', row['id']);
-
-                                //               await    fetchDataTable();
-                                //               setState(() async {
-
-                                //               });
-                                //                ScaffoldMessenger.of(context)
-                                //                     .showSnackBar(SnackBar(
-                                //                   content: Text(
-                                //                       'تم حذف البيانات بنجاح'),
-                                //                   backgroundColor: Colors.green,
-                                //                 ));
-                                //             },
-                                //             child: Text('تأكيد'),
-                                //           ),
-                                //         ],
-                                //       );
-                                //     },
-                                //   );
-                                // }
                               },
                               itemBuilder: (context) => [
                                 PopupMenuItem(

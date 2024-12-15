@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // قم بالتحقق من بيانات المستخدم عبر قاعدة البيانات أو API
     if (username == "admin" && password == "1234") {
+      userid='1';
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

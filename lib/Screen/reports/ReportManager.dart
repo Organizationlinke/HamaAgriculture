@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart' show NumberFormat;
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class ReportDetailsBySizeCopy extends StatefulWidget {
+class ReportManager extends StatefulWidget {
   final String ScreenName;
   final String ReportName;
   final int ScreenId;
@@ -21,7 +21,7 @@ class ReportDetailsBySizeCopy extends StatefulWidget {
   final bool ispick;
   final bool isSales;
 
-  ReportDetailsBySizeCopy(
+  ReportManager(
       {super.key,
       required this.ScreenName,
       required this.ScreenId,
@@ -39,7 +39,7 @@ class ReportDetailsBySizeCopy extends StatefulWidget {
   _ReportDetailsBySizeState createState() => _ReportDetailsBySizeState();
 }
 
-class _ReportDetailsBySizeState extends State<ReportDetailsBySizeCopy> {
+class _ReportDetailsBySizeState extends State<ReportManager> {
   final SupabaseClient supabase = Supabase.instance.client;
 
   // Variables for dropdowns
@@ -142,6 +142,9 @@ String seasonid_string='seasonid';
     if (selectedSeasonId != null) {
       sql_where += ' and $seasonid_string = $selectedSeasonId';
     }
+     if (widget.ScreenId == 7) {
+    sql_where += ' and id = ${widget.exportid}';
+     }
 
     print(sql_where); // لطباعة الجملة النهائية للتأكد
   }
