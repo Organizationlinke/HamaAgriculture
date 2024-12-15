@@ -4,7 +4,7 @@ const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
 const RESOURCES = {"flutter.js": "f393d3c16b631f36852323de8e583132",
-"main.dart.js": "3fe364aa5b9959a7c8bd6917fd07f4cf",
+"main.dart.js": "56ef7c3f0f889f435229f2ba9e6136b9",
 "assets/FontManifest.json": "ac3f70900a17dc2eb8830a3e27c653c3",
 "assets/AssetManifest.bin": "916ed07fe1a65197fadd22af7851afbd",
 "assets/fonts/MaterialIcons-Regular.otf": "ea8253bfb78ba82d4d314c7f528476be",
@@ -34,7 +34,7 @@ const RESOURCES = {"flutter.js": "f393d3c16b631f36852323de8e583132",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "version.json": "c9e9297649c43d308317c0789b1c8a2a",
-"flutter_bootstrap.js": "a102250463c81abefd8119aea8627481"};
+"flutter_bootstrap.js": "6a6394a2ac343d04a151469f35d2aa12"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
