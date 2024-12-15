@@ -48,12 +48,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: 50),
                       TextField(
                         controller: _usernameController,
-                        decoration: InputDecoration(labelText: 'اسم المستخدم',icon: Icon(Icons.person)),
+                        decoration: InputDecoration(labelText: 'اسم المستخدم',icon: Icon(Icons.person,color: Colors.green,)),
               
                   ),
                   TextField(
                     controller: _passwordController,
-                    decoration: InputDecoration(labelText: 'كلمة المرور',icon: Icon(Icons.password)),
+                    decoration: InputDecoration(labelText: 'كلمة المرور',icon: Icon(Icons.lock)),
                     obscureText: true,
                   ),
                   SizedBox(height: 20),
