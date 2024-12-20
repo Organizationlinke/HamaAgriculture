@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:inspection_app/tools/global.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -80,12 +81,54 @@ class _BestAreaTablePageState extends State<BestAreaTablePage> {
     // double avgFarmsPercent = rowCount > 0 ? totalFarmsPercent / rowCount : 0.0;
     // double avgVariancePercent =
     //     rowCount > 0 ? totalVariancePercent / rowCount : 0.0;
+ Future<void> copyTableToClipboard(
+      List<Map<String, dynamic>> rows, List<String> columns) async {
+    try {
+      // بناء النص المنسق
+      StringBuffer buffer = StringBuffer();
+
+      // إضافة رؤوس الأعمدة
+      buffer.writeln(columns.join('\t')); // استخدام Tab كفاصل بين الأعمدة
+
+      // إضافة الصفوف
+      for (var row in rows) {
+        List<String> rowData =
+            columns.map((col) => row[col]?.toString() ?? '').toList();
+        buffer.writeln(rowData.join('\t'));
+      }
+
+      // نسخ النص إلى الحافظة
+      await Clipboard.setData(ClipboardData(text: buffer.toString()));
+
+      print('تم نسخ محتويات الجدول إلى الحافظة!');
+    } catch (e) {
+      print('حدث خطأ أثناء النسخ: $e');
+    }
+  }
 
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Best Area Table'),
+          actions: [
+              IconButton(
+                  icon: Icon(Icons.copy),
+                  onPressed: () async {
+                    List<Map<String, dynamic>> rows = tableData;
+                   List<String> columnss = ['id_s', 'sizecode', 'kg008', 'kg015', 'export_percent', 'farms_percent', 'variance_percent'];
+
+                      
+
+                    await copyTableToClipboard(rows, columnss);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text('تم نسخ محتويات الجدول إلى الحافظة!')),
+                    );
+                  },
+                ),
+          ],
         ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -159,97 +202,3 @@ class _BestAreaTablePageState extends State<BestAreaTablePage> {
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-
-// class BestAreaTablePage extends StatefulWidget {
-//   final int exportId;
-//   final int farmId;
-
-//   const BestAreaTablePage({
-//     Key? key,
-//     required this.exportId,
-//     required this.farmId,
-//   }) : super(key: key);
-
-//   @override
-//   _BestAreaTablePageState createState() => _BestAreaTablePageState();
-// }
-
-// class _BestAreaTablePageState extends State<BestAreaTablePage> {
-//   List<Map<String, dynamic>> tableData = [];
-//   bool isLoading = true;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchBestAreaData();
-//   }
-
-//   Future<void> fetchBestAreaData() async {
-//     print('exportid:${widget.exportId}');
-//      print('farmid:${widget.farmId}');
-    
-//     try {
-//       final response = await Supabase.instance.client
-//           .rpc('get_best_area_sub', params: {
-//         'export_id': widget.exportId,
-//         'farm_id': widget.farmId,
-//       }).select();
-
-//       if (response.isNotEmpty) {
-//         setState(() {
-//           tableData = List<Map<String, dynamic>>.from(response);
-//           isLoading = false;
-//         });
-//       } else {
-//         throw Exception('Error fetching data');
-//       }
-//     } catch (e) {
-//       print(e);
-//       setState(() {
-//         isLoading = false;
-//       });
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text('Error: $e')),
-//       );
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Best Area Table'),
-//       ),
-//       body: isLoading
-//           ? const Center(child: CircularProgressIndicator())
-//           : SingleChildScrollView(
-//               // scrollDirection: Axis.horizontal,
-//               child: DataTable(
-//                 columns: const [
-//                   DataColumn(label: Text('ID')),
-//                   DataColumn(label: Text('Size Code')),
-//                   DataColumn(label: Text('KG 008')),
-//                   DataColumn(label: Text('KG 015')),
-//                   DataColumn(label: Text('Export %')),
-//                   DataColumn(label: Text('Farm %')),
-//                   DataColumn(label: Text('Variance %')),
-//                 ],
-//                 rows: tableData.map((data) {
-//                   return DataRow(cells: [
-//                     DataCell(Text(data['id_s'].toString())),
-//                     DataCell(Text(data['sizecode'] ?? '')),
-//                     DataCell(Text(data['kg008'] ?? '')),
-//                     DataCell(Text(data['kg015'] ?? '')),
-//                     DataCell(Text(data['export_percent']?.toStringAsFixed(2) ?? '0.0')),
-//                     DataCell(Text(data['farms_percent']?.toStringAsFixed(2) ?? '0.0')),
-//                     DataCell(Text(data['variance_percent']?.toStringAsFixed(2) ?? '0.0')), 
-//                   ]);
-//                 }).toList(),
-//               ),
-//             ),
-//     );
-//   }
-// }
